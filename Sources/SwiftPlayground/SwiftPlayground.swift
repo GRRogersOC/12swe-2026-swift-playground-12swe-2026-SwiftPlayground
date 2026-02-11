@@ -38,6 +38,8 @@ struct SwiftPlayground {
 
     static func main() {
 
+        let maximumItemVoume = 2.0
+
         // Input validation for measurements
         let width = getUserInput(
             question: "Enter room width",
@@ -55,14 +57,14 @@ struct SwiftPlayground {
         )
 
         // Calculate room volume and area
-        let roomVolume = length * width * height
         let roomArea = length * width
+        let roomVolume = roomArea * height
 
         // Calculate Furniture volumes
         let furnitureVolumes = [1.2, 0.8, 2.5, 0.6, 1.0]
         for (index, furnitureVolume) in furnitureVolumes.enumerated () {
             print("Furniture \(index + 1): \(furnitureVolume)m³")
-            if (furnitureVolume > 2.0) {
+            if (furnitureVolume > maximumItemVoume) {
                 print("Oversized item detected")
             }
         }
