@@ -1,135 +1,74 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
-import Foundation
-
-func menuChoice() -> Int {
-    print("""
-    ==== Egg Shop ====
-    1. Add eggs
-    2. Sell eggs
-    3. Show current stock
-    4. Show total eggs sold
-    5. Exit
-    Choose an option:
-    """)
-
-    print("Enter menu option")
-    if let input = readLine() {
-        if let number = Int(input){
-            print("Entered menu option \(number)")
-            return number
-        } else {
-            print("Not a valid menu option")   
-        }
-    }  
-    return 0
+func print(board: [[String]]){
+    board.forEach { line in
+    print("\(line[0]) | \(line[1]) | \(line[2])")
+    print("--+---+--")
+    
+    }
+    print()
+    
 }
 
-func readInteger(prompt: String) -> Int {
-    print(prompt)
-    var returnValue = -1
-    guard let userInput = readLine(), let number = Int(userInput), number > 0 else {
-        print("Invalid number.")
-        return readInteger(prompt: prompt)
-    }
-    returnValue = number
-    return returnValue
-}
-
-// addEggs takes the current stock of eggs in the shop, adds an amount to it
-// and returns the new current stock amount
-func addEggs(currentStock: Int, amount: Int) -> Int {
-    if amount <= 0 {
-        print("Cant add \(amount)")
-        return currentStock
-    }
-
-    if currentStock + amount >= 1000 {
-        print("Too many eggs, not enough storage")
-        return currentStock
-    }
-
-    return currentStock + amount 
-}
-// sellEggs takes the current tock of eggs in the shop, takes an amount from it
-// and returns the new stock amount
-func sellEggs(currentStock: Int, amount: Int) -> Int? {
-    if amount <= 0 {
-        print("Can't sell \(amount)")
-        return nil  
-    }
-
-    if amount > currentStock {
-        print("Cant sell more than \(currentStock) eggs")
-        return nil
-    }
-    return currentStock - amount
-}
-// updateSoldCount takes the current number of eggs sold, adds an amount to it
-// and returns the new amount of sold eggs
-func updateSoldCount(currentSold: Int, amount: Int) -> Int {
-    if amount <= 0 {
-        print("Cant add \(amount)")
-        return currentSold
-    }
-    return currentSold + amount
-}
-// stockMessage takes the amount of stock, converts it to a string
-// and returns the stock
-func stockMessage(stock: Int) -> String {
-    return "You have \(stock) of eggs left"
+func askForPosition(board: [[String]]) -> [Int] {
+    while true{ }
+    print("Please enter column number 1-3: ")
+    let userInput = readLine()!
+    let rowNumber = Int(userInput)! - 1
 }
 
 
 @main
 struct SwiftPlayground {
     static func main() {
-        let availableOptions = 1...5
 
-        var currentStock = 100
-        var currentSold = 0
-        var choice: Int
 
-        repeat { 
-            repeat {
-                print("")
-                choice = menuChoice()
-            } while !availableOptions.contains(choice)
 
-            switch choice{
-            case 1:
-                print("==== Add Eggs to current stock ====")
-                let amount = readInteger(prompt: "Enter amount of eggs you are adding to current stock")
-                currentStock = addEggs(currentStock: currentStock, amount: amount)
 
-            case 2:            
-                print("==== Sell Eggs from stock ====")
-                let amount = readInteger(prompt: "Enter amount you are trying to sell")
+              
+//         var board = [
+//             [".", ".", "."],
+//             [".", ".", "."], // row 1
+//             [".", ".", "."]  // row 2
+//         ]
+//         print(board: board)
+        
+//         //first move, O in middle
+//         board[1][1] = "O"
+//         print(board: board)
 
-                if let newStock = sellEggs(currentStock: currentStock, amount: amount) {
-                    currentStock = newStock
-                    currentSold = updateSoldCount(currentSold: currentSold, amount: amount)
-                    print("Sale successful!")
-                } else {
-                    print("Sale failed.")
-                }
-            case 3:
-                print("==== Current Amount of Stock ====")
-                print(stockMessage(stock: currentStock))
+//         // second move, X top left
+//         board[0][0] = "X"
+//         print(board: board)
 
-            case 4:
-                print("==== Number of Sold Eggs ====")
-                print(currentSold)
-                
-            case 5:
-                print("==== Quit ====")
-                exit(0)
+//         //third move, O top roght
+//         board[0][2] = "O"
+//         print(board: board)
 
-            default:
-                break
-                
-            } 
-        } while choice != 5
+//         //forth move, 
+//         board[2][0] = "X"
+//         print(board: board)
+
+//         //fifth move, O
+//         board[1][0] = "O"
+//         print(board: board)
+
+//         //sixth move
+//         board[1][2] = "X"
+//         print(board: board)
+
+//         //seventh move
+//         board[2][1] = "O"
+//         print(board: board)
+
+//         //eighth move
+//         board[2][2] = "X"
+//         print(board: board)
+
+//         //ninth move
+//         board[0][1] = "O"
+//         print(board: board)
     }
+
 }
