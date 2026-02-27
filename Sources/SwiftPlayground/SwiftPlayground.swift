@@ -1,6 +1,10 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
+/**
+menuChoice shows the possible menu options and checks the option selected is valid
+- If the selected menu option is not a value of 1-5 it will return the number and print an inalid option message and ask user to try again.
+*/
 func menuChoice() -> Int {
     while true {
         print("""
@@ -13,7 +17,7 @@ func menuChoice() -> Int {
         Choose an option:
         """)
 
-        print("Enter menu option")
+        print("\nEnter menu option")
             if let input = readLine(),
             let number = Int(input),
             (1...5).contains(number) {
@@ -23,7 +27,9 @@ func menuChoice() -> Int {
     }
 }
 
-
+/**
+readInteger reads the users input and validates thhat the number is acecptable
+*/
 func readInteger(prompt: String) -> Int {
     print(prompt)
     var returnValue = -1
@@ -35,7 +41,11 @@ func readInteger(prompt: String) -> Int {
     return returnValue
 }
 
-// addEggs takes the current stock of eggs in the shop, adds an amount to it and returns the new current stock amount
+/**
+addEggs takes the current stock of eggs in the shop, adds an amount to it and returns the new current stock amount
+- if the use tries to add less than 0 the functions fails, and prints and error message
+- if the total amount of eggs goes over 1000, the function prints a message and returns the currentstock
+*/
 func addEggs(currentStock: Int, amount: Int) -> Int {
     if amount <= 0 {
         print("Cant add \(amount)")
@@ -49,8 +59,12 @@ func addEggs(currentStock: Int, amount: Int) -> Int {
 
     return currentStock + amount 
 }
-// sellEggs takes the current tock of eggs in the shop, takes an amount from it
-// and returns the new stock amount
+
+/**
+sellEggs takes the current tock of eggs in the shop, takes an amount from it and returns the new stock amount
+- if the user tries to sell 0 or less eggs an error message i printed and nil is returned
+- if the users tries to sell more eggs than currently in stock and error message is printed and nil is returned
+*/ 
 func sellEggs(currentStock: Int, amount: Int) -> Int? {
     if amount <= 0 {
         print("Can't sell \(amount)")
@@ -63,8 +77,10 @@ func sellEggs(currentStock: Int, amount: Int) -> Int? {
     }
     return currentStock - amount
 }
-// updateSoldCount takes the current number of eggs sold, adds an amount to it
-// and returns the new amount of sold eggs
+
+/**
+updateSoldCount takes the current number of eggs sold, adds an amount to it and returns the new amount of sold eggs
+*/ 
 func updateSoldCount(currentSold: Int, amount: Int) -> Int {
     if amount <= 0 {
         print("Cant add \(amount)")
@@ -72,8 +88,10 @@ func updateSoldCount(currentSold: Int, amount: Int) -> Int {
     }
     return currentSold + amount
 }
-// stockMessage takes the amount of stock, converts it to a string
-// and returns the stock
+
+/**
+stockMessage takes the amount of stock, converts it to a string and returns the stock
+*/ 
 func stockMessage(stock: Int) -> String {
     return "You have \(stock) eggs in stock."
 }
@@ -95,6 +113,9 @@ struct SwiftPlayground {
                 choice = menuChoice()
             } while !availableOptions.contains(choice)
 
+
+// the switch statement is the menu outputs
+
             switch choice{
             case 1:
                 print("==== Add Eggs to current stock ====")
@@ -112,6 +133,7 @@ struct SwiftPlayground {
                 } else {
                     print("Sale failed.")
                 }
+
             case 3:
                 print("==== Current Amount of Stock ====")
                 print(stockMessage(stock: currentStock))
@@ -123,10 +145,9 @@ struct SwiftPlayground {
             case 5:
                 print("==== Quit ====")
             
-
             default:
                 break
-                
+
             } 
         } while choice != 5
     }
