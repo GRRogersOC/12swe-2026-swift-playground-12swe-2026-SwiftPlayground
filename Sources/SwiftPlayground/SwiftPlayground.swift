@@ -2,6 +2,8 @@
 // https://docs.swift.org/swift-book
 import Foundation
 
+
+// Stores all information about completed sales
 struct SalesData {
 var saleWeights: [Double] = []
 var bagCounts: [Double] = []
@@ -11,13 +13,20 @@ var totalCharges: [Double] = []
 @MainActor
 var data = SalesData()
 
+// Program constraints and validation limits
 let maximumStock = 50.0
 let minimumStock = 0.0
 let minimumSale = 0.1 
 let maximumBags = 5000.0
 
 /** 
-Menu choice function prints the menu and all available options, and does a small check to validate menu choice
+ Displays the Kumara Stand menu and validates the user's menu selection.
+
+ Parameters:
+ None
+
+ Returns:
+ An integer between 1 and 6 representing the selected menu option.
 */
 func menuChoice() -> Int {
     let menu: [[String]] = [
@@ -50,7 +59,13 @@ func menuChoice() -> Int {
 }
 
 /**
-Read integer reads the users inputted number and validates
+ Prompts the user for a positive number and validates the input.
+
+ Parameters:
+ - prompt: The message displayed to the user.
+
+ Returns:
+ A valid positive Double entered by the user.
 */
 func readInteger(prompt: String) -> Double {
     print(prompt)
@@ -64,8 +79,15 @@ func readInteger(prompt: String) -> Double {
 }
 
 /**
-Add kumara stock to the kumara container in kgs
-*/
+ Adds kumara to the current stock if the amount is valid and there is enough storage space.
+
+ Parameters:
+ - currentStock: The current amount of kumara in stock.
+ - amount: The amount of kumara being added.
+
+ Returns:
+ The updated stock level if successful, otherwise the original stock level.
+ */
 func addKumara(currentStock: Double, amount: Double) -> Double {
 
     if amount <= 0.0 {
@@ -84,8 +106,15 @@ func addKumara(currentStock: Double, amount: Double) -> Double {
 
 
 /**
-Sell kumara, takes kumara away from the
-*/
+ Removes kumara from stock when a sale is made.
+
+ Parameters:
+ - currentStock: The current amount of kumara in stock.
+ - amount: The amount of kumara being sold.
+
+ Returns:
+ The new stock level if the sale is valid, otherwise nil.
+ */
 func sellKumara(currentStock: Double, amount: Double) -> Double? {
     if amount < minimumSale {
         print("Can't sell \(amount)")
@@ -100,8 +129,15 @@ func sellKumara(currentStock: Double, amount: Double) -> Double? {
 }
 
 /**
-Sale cost combines the price of kumara and bags per purchase
-*/
+ Calculates the total cost of a sale.
+
+ Parameters:
+ - weight: Amount of kumara sold in kilograms.
+ - bags: Number of bags used.
+
+ Returns:
+ The total sale cost including kumara and bag charges.
+ */
 func calculateTotal(weight: Double, bags: Double) -> Double {
     let kumaraCost = weight * 3.0
     let bagCost = bags * 0.20
@@ -111,8 +147,15 @@ func calculateTotal(weight: Double, bags: Double) -> Double {
 }
 
 /**
-Update the sold count on kumara
-*/
+ Updates the total amount of kumara sold.
+
+ Parameters:
+ - currentSold: Current total kilograms sold.
+ - amount: Amount sold in the current transaction.
+
+ Returns:
+ Updated total kilograms sold.
+ */
 func updateSoldCount(currentSold: Double, amount: Double) -> Double {
     if amount <= 0.0 {
         print("Cant sell \(amount)")
@@ -121,16 +164,33 @@ func updateSoldCount(currentSold: Double, amount: Double) -> Double {
     return currentSold + amount
 }
 
-/** 
-View the current stock of kumara in kgs
-*/
+/**
+ Creates a stock message for the user.
+
+ Parameters:
+ - stock: Current stock level.
+
+ Returns:
+ A formatted string showing the amount of stock available.
+ */
 func stockMessage(stock: Double) -> String {
     return "You have \(stock) Kgs of kumara in the container."
 }
 
 /**
-Summary for owner - Average weight per sold bag, average amount earned per bag
-*/
+ Displays a summary for the owner including:
+ - Total weight sold
+ - Total bags used
+ - Total earnings
+ - Average weight per bag
+ - Average earnings per bag
+
+ Parameters:
+ None
+
+ Returns:
+ Nothing (prints summary information).
+ */
 @MainActor
 func ownerSummary() {
 
@@ -143,6 +203,7 @@ func ownerSummary() {
         return
     }
 
+    // Calculate totals from all recorded sales
     for i in data.saleWeights.indices {
         totalWeight += data.saleWeights[i]
         totalBags += data.bagCounts[i]
@@ -154,6 +215,7 @@ func ownerSummary() {
         return
     }
 
+    // Calculate averages for owner reporting
     let avgWeightPerBag = totalWeight / totalBags
     let avgMoneyPerBag = totalMoney / totalBags
 
@@ -164,6 +226,15 @@ func ownerSummary() {
     print(String(format: "Average earnings per bag: $%.2f", avgMoneyPerBag))
 }
 
+/**
+ Displays every sale that has been recorded.
+
+ Parameters:
+ None
+
+ Returns:
+ Nothing (prints sale records).
+ */
 @MainActor
 func saleRecord() {
 
@@ -172,7 +243,7 @@ func saleRecord() {
         return
     }
 
-
+    // Loop through each recorded sale and display details
     for i in data.saleWeights.indices {
         let weight = data.saleWeights[i]
         let bags = data.bagCounts[i]
@@ -193,10 +264,15 @@ struct SwiftPlayground {
     static func main() {
 let availableOptions = 1...6
 
+        // Starting stock available for sale
         var currentStock = 25.0
+
+        // Running total of kumara sold
         var currentSold = 0.0
+        
         var choice: Int
 
+        // Continue displaying menu until a valid option is entered
         repeat { 
             repeat {
                 print("")
@@ -206,25 +282,34 @@ let availableOptions = 1...6
             switch choice {
             case 1:
                 print("==== Add Kumara to current stock ====")
+
+                // Get amount of kumara to add to stock
                 let amount = readInteger(prompt: "Enter amount of Kumara you are adding to current stock")
+                
+                // Update stock level
                 currentStock = addKumara(currentStock: currentStock, amount: amount)
 
             case 2:
                 print("==== Sell Kumara from stock ====")
+
+                // Get sale information from user
                 let amount = readInteger(prompt: "Enter amount you are trying to buy")
                 let bags = readInteger(prompt: "Enter number of bags used")
 
+                // Validate sale and calculate new stock level
                 guard let newStock = sellKumara(currentStock: currentStock, amount: amount) else {
                     print("Sale failed.")
                     break
                 }
 
+                // Check bag amount is within allowed range
                 if bags <= 0 || bags > maximumBags {
                     print("Invalid number of bags.")
                     print("Sale failed.")
                     break
                 }
 
+                // Ensure there are enough bags to carry the kumara
                 if bags * 5 < amount {
                     print("Not enough bags. Each bag can only hold 5kg.")
                     print("You need at least \(Int(ceil(amount / 5))) bags for \(amount)kg of kumara.")
@@ -232,11 +317,14 @@ let availableOptions = 1...6
                     break
                 }
 
+                // Update stock and total kilograms sold
                 currentStock = newStock
                 currentSold = updateSoldCount(currentSold: currentSold, amount: amount)
 
+                // Calculate customer charge
                 let total = calculateTotal(weight: amount, bags: bags)
 
+                // Store sale information for reports and summaries
                 data.saleWeights.append(amount)
                 data.bagCounts.append(bags)
                 data.totalCharges.append(total)
@@ -246,13 +334,19 @@ let availableOptions = 1...6
 
             case 3:
                 print("==== Current Amount of Stock ====")
+
+                // Display current stock level
                 print(stockMessage(stock: currentStock))
 
             case 4:
                 print("==== Sales Records ====")
+
+                // Display all recorded sales
                 saleRecord()                
             case 5:
                 print("==== Owner Summary ====")
+
+                // Display owner statistics and averages
                 ownerSummary()
                 
             case 6:
